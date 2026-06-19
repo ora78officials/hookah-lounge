@@ -1,19 +1,28 @@
 const http = require('http');
 const fs = require('fs');
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-http.createServer((req, res) => {
-  fs.readFile('index.html', (err, data) => {
+const server = http.createServer((req, res) => {
+
+  fs.readFile('./index.html', (err, data) => {
+
     if (err) {
-      res.writeHead(404);
-      res.end('File not found');
+      res.writeHead(500);
+      res.end('Error loading index.html');
       return;
     }
 
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(data);
-  });
-}).listen(port, '0.0.0.0');
+    res.writeHead(200, {
+      'Content-Type': 'text/html'
+    });
 
-console.log(`Server running on port ${port}`);
+    res.end(data);
+
+  });
+
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
